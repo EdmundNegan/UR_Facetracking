@@ -34,12 +34,12 @@ ACCELERATION = 0.5  # Robot acceleration value
 VELOCITY = 0.5  # Robot speed value
 
 # The Joint position the robot starts at
-robot_startposition = (math.radians(-218),
-                    math.radians(-63),
-                    math.radians(-93),
-                    math.radians(-20),
-                    math.radians(88),
-                    math.radians(0))
+robot_startposition = (math.radians(0),
+                    math.radians(-90),
+                    math.radians(-90),
+                    math.radians(0),
+                    math.radians(90),
+                    math.radians(90))
 
 # Path to the face-detection model:
 pretrained_model = cv2.dnn.readNetFromCaffe("MODELS/deploy.prototxt.txt", "MODELS/res10_300x300_ssd_iter_140000.caffemodel")
@@ -51,16 +51,16 @@ video_asp_ratio  = video_resolution[0] / video_resolution[1]  # Aspect ration of
 video_viewangle_hor = math.radians(25)  # Camera FOV (field of fiew) angle in radians in horizontal direction
 
 # Variable which scales the robot movement from pixels to meters.
-m_per_pixel = 00.00009  
+m_per_pixel = 00.00005  
 
 # Size of the robot view-window
 # The robot will at most move this distance in each direction
-max_x = 0.2
-max_y = 0.2
+max_x = 0.1
+max_y = 0.1
 
 # Maximum Rotation of the robot at the edge of the view window
-hor_rot_max = math.radians(50)
-vert_rot_max = math.radians(25)
+hor_rot_max = math.radians(25)
+vert_rot_max = math.radians(12.5)
 
 
 vs = VideoStream(src= 0 ,
@@ -303,8 +303,8 @@ def move_to_face(list_of_facepos,robot_pos):
     robot_target_xy = check_max_xy(robot_target_xy)
     prev_robot_pos = robot_target_xy
 
-    x = robot_target_xy[0]
-    y = robot_target_xy[1]
+    y = robot_target_xy[0]
+    x = robot_target_xy[1]
     z = 0
     xyz_coords = m3d.Vector(x, y, z)
 
@@ -365,6 +365,7 @@ except KeyboardInterrupt:
     print("closing robot connection")
     # Remember to always close the robot connection, otherwise it is not possible to reconnect
     robot.close()
-
+    cv2.destroyAllWindows()  # Close the camera window
 except:
     robot.close()
+    cv2.destroyAllWindows()  # Close the camera window
